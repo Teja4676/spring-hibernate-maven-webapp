@@ -1,0 +1,58 @@
+pipeline {
+    agent any
+    stages {
+        stage('SCM') {
+            steps {
+                echo 'code updated'
+                git 'https://github.com/Teja4676/spring-hibernate-maven-webapp.git'
+                
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building'
+                sh 'cd /var/lib/jenkins/workspace/Build Pipeline/'
+                sh 'mvn package'
+                
+            }
+        }
+        stage('Code Coverage') {
+            steps {
+                echo 'Code Coverage'
+                sh 'cd /var/lib/jenkins/workspace/BuildPipeline/'
+                sh 'mvn cobertura:cobertura -Dcobertura.report.format=xml'
+            }
+        }
+        
+        stage('sonar anaysis') {
+            steps {
+                echo 'sonar analysis'
+                sh 'cd /var/lib/jenkins/workspace/BuildPipeline/'
+                sh 'mvn sonar:sonar'
+                
+            }
+        }
+        stage('Docementation') {
+            steps {
+                echo 'Documentation'
+                sh 'mvn javadoc:javadoc'
+                
+            }
+        }
+        stage('Deploy to nexus') {
+            steps {
+                echo 'deploying to nexus'
+                sh 'mvn package'
+                
+            }
+        }
+        stage('Deploy to tomcat') {
+            steps {
+                echo 'deploying to tomcat'
+                deploy adapters: [tomcat7(credentialsId: 'deploy', path: '', url: 'http://35.226.230.5:9090')], contextPath: '/Springggggggg', onFailure: false, war: '**/.*war'
+            }
+        }
+        
+        }
+    }
+
