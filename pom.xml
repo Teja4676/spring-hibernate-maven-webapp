@@ -153,8 +153,8 @@
 	</build>
 	<distributionManagement>
         <repository>
-            <id>releases</id>
-                    <url>http://localhost:8081/nexus/content/repositories/releases</url>
+           <id>releaserRepo</id>
+    		<url>http://localhost:8081/nexus/content/repositories/releaserRepo</url>
         </repository>
     	</distributionManagement>
 </project>
